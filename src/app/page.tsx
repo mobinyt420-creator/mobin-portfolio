@@ -8,7 +8,6 @@ import {
   Zap,
   Terminal,
   ExternalLink,
-  Github,
   Mail,
   Send,
   CheckCircle,
@@ -17,14 +16,16 @@ import {
   Users,
   Award,
   ArrowRight,
-  Code2,
   ShieldCheck,
   Cpu,
   Layers,
   Sparkles,
   Play,
-  Briefcase,
-  MessageSquare
+  Flame,
+  Check,
+  ChevronRight,
+  Radio,
+  Clock
 } from "lucide-react";
 
 export default function Home() {
@@ -36,10 +37,37 @@ export default function Home() {
     {
       command: "welcome",
       output:
-        "Welcome to Mobin OS v3.2. Type 'help' to explore available commands.",
+        "Welcome to Mr Mobin Console v4.0. Type 'help' to inspect live capabilities.",
     },
   ]);
-  const [activeTab, setActiveTab] = useState<"all" | "apps" | "web" | "ai">("all");
+
+  // Animated counters
+  const [ytCount, setYtCount] = useState(0);
+  const [tgCount, setTgCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const endYt = 200;
+    const endTg = 150;
+    const duration = 1600;
+    const startTime = performance.now();
+
+    const animateCounters = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutExpo
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+      setYtCount(Math.floor(ease * endYt));
+      setTgCount(Math.floor(ease * endTg));
+
+      if (progress < 1) {
+        requestAnimationFrame(animateCounters);
+      }
+    };
+
+    requestAnimationFrame(animateCounters);
+  }, []);
 
   const copyEmail = () => {
     navigator.clipboard.writeText("mobinyt420@gmail.com");
@@ -56,177 +84,191 @@ export default function Home() {
     switch (cmd) {
       case "help":
         response =
-          "Available commands: 'about', 'projects', 'skills', 'stats', 'contact', 'clear'";
+          "Commands: 'about', 'projects', 'automations', 'stats', 'contact', 'clear'";
         break;
       case "about":
         response =
-          "Mr Mobin: AI-Native Software Engineer & Creator from Bangladesh. Specializes in Flutter, Next.js, and automated AI systems.";
+          "Mr Mobin: AI-Native Full-Stack Software Engineer & Digital Creator. Crafts production Flutter mobile apps and high-performance Next.js systems.";
         break;
       case "projects":
         response =
-          "1. OBIN - Gaming & Super Hub (Play Store v3.0.8 Live)\n2. Finance OS (Next.js 16 + React 19)\n3. 24/7 Cloud Sync Bot (Render + Telegram)\n4. OBIN Portal (obinapp.vercel.app)";
+          "1. OBIN - Gaming & Super Hub (Google Play Store v3.0.8 Approved)\n2. OBIN Shop Platform (Next.js 15, obinshop.com)";
         break;
-      case "skills":
+      case "automations":
         response =
-          "Flutter/Dart, Next.js, React, Tailwind CSS, Firebase, Node.js, AI UGC Video Creation, AdMob Monetization, Play Console Publishing";
+          "Automated cloud data pipelines, real-time background sync daemons, AI UGC ad scripting & video engines, high-speed webhook workflows.";
         break;
       case "stats":
         response =
-          "YouTube: 200,000+ Subs across 4 channels | Telegram: 150,000+ Members | Google Play: Approved Live";
+          "YouTube: 200,000+ Subscribers (4 Channels) | Telegram: 150,000+ Community Members | Play Store: v3.0.8 Live";
         break;
       case "contact":
         response =
-          "Email: mobinyt420@gmail.com | Telegram: @MrMobin01 | GitHub: mobinyt420-creator";
+          "Telegram: @MrMobin01 | Email: mobinyt420@gmail.com (Fast direct responses)";
         break;
       case "clear":
         setTerminalHistory([]);
         setTerminalInput("");
         return;
       default:
-        response = `Command not recognized: '${cmd}'. Type 'help' for options.`;
+        response = `Command '${cmd}' not found. Type 'help' for options.`;
     }
 
     setTerminalHistory((prev) => [...prev, { command: terminalInput, output: response }]);
     setTerminalInput("");
   };
 
-  const projects = [
+  // Only the two public flagship projects requested by the user
+  const publicProjects = [
     {
       id: "obin-app",
-      title: "OBIN - Gaming & Super Hub",
-      category: "apps",
-      badge: "Google Play Verified • v3.0.8",
-      badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      title: "OBIN — Gaming & Super Hub",
+      tagline: "Google Play Store Approved Production App",
+      badge: "Google Play Live • v3.0.8",
+      badgeClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
       description:
-        "Flagship mobile application approved on Google Play Store. Features real-time gaming services, Google AdMob monetization, Firebase authentication, external bKash payment redirection, and secure account deletion flow.",
-      tech: ["Flutter", "Dart", "Firebase", "Google AdMob", "Google Play API"],
-      playStoreUrl: "https://play.google.com/store/apps/details?id=com.mobinx.gaming",
-      webUrl: "https://obinapp.vercel.app/",
-      featured: true,
-      stats: "Live on Play Store",
+        "Flagship mobile utility application approved and published live on the Google Play Store. Engineered with Flutter & Dart for ultra-smooth 60fps performance. Integrates Google AdMob monetization, real-time Firebase authentication, external bKash payment redirection, and secure GDPR-compliant user account deletion.",
+      tech: ["Flutter 3.x", "Dart", "Google Play Store", "AdMob SDK", "Firebase Auth", "Firestore"],
+      primaryLink: {
+        text: "View on Google Play",
+        url: "https://play.google.com/store/apps/details?id=com.mobinx.gaming",
+        isPlayStore: true,
+      },
+      secondaryLink: {
+        text: "Official Portal",
+        url: "https://obinapp.vercel.app/",
+      },
+      stats: "Approved Production App",
+      gradient: "from-emerald-500/10 via-cyan-500/5 to-transparent",
     },
     {
-      id: "finance-os",
-      title: "Finance OS & Multi-Currency Platform",
-      category: "web",
-      badge: "Production SaaS",
-      badgeColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+      id: "obin-shop",
+      title: "OBIN Shop Web Platform",
+      tagline: "Modern High-Performance E-Commerce & Service Hub",
+      badge: "Next.js 15 • Edge Deployed",
+      badgeClass: "bg-cyan-500/15 text-cyan-400 border-cyan-500/30",
       description:
-        "Full-stack high-speed personal and enterprise finance management web application. Built with Next.js 16, React 19, and Tailwind CSS. Supports multi-currency tracking (BDT & USD), real-time net-worth analytics, and transaction ledgers.",
-      tech: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "Analytics"],
-      webUrl: "https://obinapp.vercel.app/",
-      featured: true,
-      stats: "Modern Next.js 16 Architecture",
-    },
-    {
-      id: "cloud-bot",
-      title: "24/7 Cloud Automation Sync Bot",
-      category: "ai",
-      badge: "Render.com Daemon",
-      badgeColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-      description:
-        "Continuous automated cloud bot running on Render. Synchronizes real-time Telegram orders with Google Sheets database, dispatches instant notifications, and handles inventory tracking automatically with zero downtime.",
-      tech: ["Node.js", "Render Cloud", "Telegram Bot API", "Google Sheets API"],
-      webUrl: "https://t.me/MrMobin01",
-      featured: false,
-      stats: "99.9% Uptime 24/7",
-    },
-    {
-      id: "obin-web",
-      title: "OBIN Official Web Portal & Compliance Hub",
-      category: "web",
-      badge: "Live on Vercel",
-      badgeColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-      description:
-        "Official verified landing portal for OBIN. Engineered for Google AdMob crawler compliance (app-ads.txt), GDPR/Play Store privacy policy requirements, and dynamic app release showcases.",
-      tech: ["Next.js", "Vercel Edge", "DNS Config", "SEO Optimized"],
-      webUrl: "https://obinapp.vercel.app/",
-      featured: false,
-      stats: "Crawler Verified",
+        "High-concurrency, lightning-fast digital platform for the OBIN ecosystem. Built using Next.js 15, React 19, and Tailwind CSS. Features instant server-side page rendering, SEO optimization, responsive dark aesthetic, and seamless cross-platform syncing with the mobile application.",
+      tech: ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS", "Vercel Edge", "REST API"],
+      primaryLink: {
+        text: "Launch Platform",
+        url: "https://obinapp.vercel.app/",
+        isPlayStore: false,
+      },
+      secondaryLink: {
+        text: "Domain: obinshop.com",
+        url: "https://obinapp.vercel.app/",
+      },
+      stats: "Live Global Edge",
+      gradient: "from-cyan-500/10 via-purple-500/5 to-transparent",
     },
   ];
 
-  const filteredProjects =
-    activeTab === "all"
-      ? projects
-      : projects.filter((p) => p.category === activeTab);
+  const marqueeSkills = [
+    "FLUTTER & DART",
+    "NEXT.JS 15",
+    "AI AUTOMATION",
+    "GOOGLE PLAY APPROVED",
+    "REACT 19",
+    "AI UGC VIDEO CREATION",
+    "ADMOB MONETIZATION",
+    "FIREBASE BACKEND",
+    "CLOUD SYNC WORKFLOWS",
+    "TAILWIND CSS",
+    "TYPESCRIPT",
+    "200K+ AUDIENCE CREATOR",
+  ];
 
   return (
-    <div className="relative min-h-screen bg-[#07090e] bg-grid-pattern text-slate-100 overflow-x-hidden">
-      {/* Ambient background glow orbs */}
-      <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[450px] bg-cyan-600/15 rounded-full blur-[140px] pointer-events-none" />
-      <div className="fixed top-[40%] right-[-5%] w-[500px] h-[400px] bg-purple-600/10 rounded-full blur-[160px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] left-[-5%] w-[500px] h-[400px] bg-emerald-600/10 rounded-full blur-[150px] pointer-events-none" />
+    <div className="relative min-h-screen bg-[#030712] bg-grid-cyber text-slate-100 selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden">
+      {/* Dynamic Background Glow Spots */}
+      <div className="fixed top-[-15%] left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-b from-cyan-600/20 via-indigo-600/15 to-transparent rounded-full blur-[160px] pointer-events-none animate-pulse-glow" />
+      <div className="fixed top-[45%] right-[-10%] w-[600px] h-[500px] bg-purple-600/15 rounded-full blur-[170px] pointer-events-none animate-float-slow" />
+      <div className="fixed bottom-[-10%] left-[-10%] w-[600px] h-[500px] bg-emerald-600/15 rounded-full blur-[160px] pointer-events-none" />
 
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#07090e]/85 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      {/* Floating Top Navigation */}
+      <header className="sticky top-4 z-50 max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="glass-panel rounded-2xl px-5 py-3.5 flex items-center justify-between border border-white/10 shadow-2xl backdrop-blur-2xl">
+          {/* Logo / Brand Name */}
           <a href="#" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-[1px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition">
-              <div className="w-full h-full bg-[#0b0f19] rounded-[11px] flex items-center justify-center font-bold text-lg text-cyan-400">
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform">
+              <div className="w-full h-full bg-[#080d1a] rounded-[11px] flex items-center justify-center font-black text-lg text-cyan-300">
                 M
               </div>
             </div>
             <div>
-              <div className="font-extrabold text-lg tracking-tight text-white flex items-center gap-2">
-                Mr Mobin
+              <div className="font-extrabold text-base tracking-tight text-white flex items-center gap-2">
+                MR MOBIN
                 <span className="flex h-2 w-2 relative">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-mono">AI & Flutter Engineer</p>
+              <p className="text-[11px] text-cyan-400 font-mono tracking-wide">AI-Native Engineer & Creator</p>
             </div>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#about" className="hover:text-cyan-400 transition">About</a>
-            <a href="#projects" className="hover:text-cyan-400 transition">Projects</a>
-            <a href="#skills" className="hover:text-cyan-400 transition">Tech Stack</a>
-            <a href="#creator" className="hover:text-cyan-400 transition">Creator Stats</a>
-            <a href="#terminal" className="hover:text-cyan-400 transition">Terminal</a>
-            <a href="#contact" className="hover:text-cyan-400 transition">Contact</a>
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-slate-300">
+            <a href="#projects" className="hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="#stats" className="hover:text-cyan-400 transition-colors">Audience</a>
+            <a href="#automations" className="hover:text-cyan-400 transition-colors">Automations</a>
+            <a href="#terminal" className="hover:text-cyan-400 transition-colors">Console</a>
+            <a href="#contact" className="hover:text-cyan-400 transition-colors">Contact</a>
           </nav>
 
+          {/* Action Button */}
           <div className="flex items-center gap-3">
             <a
               href="https://t.me/MrMobin01"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm font-semibold transition shadow-sm hover:shadow-cyan-500/20"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-bold tracking-wide uppercase shadow-lg shadow-cyan-500/25 transition transform hover:-translate-y-0.5"
             >
-              <Send className="w-4 h-4" />
-              <span>Hire on Telegram</span>
+              <Send className="w-3.5 h-3.5" />
+              <span>Let&apos;s Talk</span>
             </a>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
-          {/* Status Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-950/30 text-cyan-300 text-xs sm:text-sm font-medium shadow-inner shadow-cyan-500/20">
-            <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span>Available for Upwork / Fiverr Freelance & App Projects</span>
+      <section className="relative pt-16 sm:pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div className="text-center space-y-6">
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-300 text-xs sm:text-sm font-semibold shadow-inner shadow-cyan-500/20 animate-float">
+            <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" style={{ animationDuration: "6s" }} />
+            <span>Available for High-Impact App & AI Contracts</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+            <span className="text-slate-400 text-xs font-mono">100% Verified Quality</span>
           </div>
 
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
-            Architecting <span className="gradient-text">Production Apps</span> & Next-Gen <span className="gradient-text-emerald">AI Experiences</span>
-          </h1>
+          {/* Big Name Showcase */}
+          <div className="space-y-2">
+            <h2 className="text-sm sm:text-base font-mono uppercase tracking-[0.35em] text-cyan-400/90 font-bold">
+              Engineering The Future
+            </h2>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] text-white">
+              <span className="gradient-name drop-shadow-2xl">MR MOBIN</span>
+            </h1>
+          </div>
 
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            I&apos;m <strong className="text-white">Mr Mobin</strong>, a full-stack engineer and digital creator with over <span className="text-cyan-300 font-semibold">200k+ audience</span>. I build Google Play verified Flutter apps, high-performance Next.js platforms, and scalable automated cloud workflows.
+          {/* Punchy Subheading */}
+          <p className="text-lg sm:text-2xl font-medium text-slate-200 max-w-3xl mx-auto leading-relaxed">
+            Architecting <span className="text-cyan-400 font-bold">Production Flutter Apps</span>, High-Performance <span className="text-indigo-400 font-bold">Next.js Web Platforms</span> & Autonomous <span className="text-emerald-400 font-bold">AI Automations</span>.
           </p>
 
-          {/* Action Buttons */}
+          <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Developer and digital creator backed by a loyal <strong className="text-white">200K+ YouTube audience</strong> and <strong className="text-white">150K+ Telegram community</strong>. I take ambitious digital ideas from zero to approved live production.
+          </p>
+
+          {/* CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <a
               href="#projects"
-              className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold flex items-center gap-2.5 shadow-lg shadow-cyan-500/25 transition transform hover:-translate-y-0.5"
+              className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm tracking-wide uppercase flex items-center gap-3 shadow-xl shadow-cyan-500/30 transition transform hover:-translate-y-1"
             >
+              <Flame className="w-4 h-4 text-yellow-300" />
               <span>Explore Live Projects</span>
               <ArrowRight className="w-4 h-4" />
             </a>
@@ -235,134 +277,175 @@ export default function Home() {
               href="https://t.me/MrMobin01"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-7 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold flex items-center gap-2.5 transition transform hover:-translate-y-0.5"
+              className="px-7 py-4 rounded-xl glass-panel hover:bg-slate-800/80 border border-slate-700/80 text-slate-100 font-semibold text-sm flex items-center gap-2.5 transition transform hover:-translate-y-1"
             >
               <Send className="w-4 h-4 text-cyan-400" />
-              <span>Direct Telegram Chat</span>
+              <span>Direct Telegram (@MrMobin01)</span>
             </a>
 
             <button
               onClick={copyEmail}
-              className="px-5 py-3.5 rounded-xl bg-slate-900/60 hover:bg-slate-800 border border-slate-800 text-slate-300 font-medium flex items-center gap-2 transition"
+              className="px-6 py-4 rounded-xl glass-panel hover:bg-slate-800/80 border border-slate-700/80 text-slate-200 font-medium text-sm flex items-center gap-2 transition"
               title="Copy Email"
             >
               {copied ? (
                 <>
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-400 text-sm">Copied!</span>
+                  <span className="text-emerald-400 font-semibold">Copied!</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4 text-slate-400" />
-                  <span className="text-sm">Copy Email</span>
+                  <span>Copy Email</span>
                 </>
               )}
             </button>
           </div>
+        </div>
 
-          {/* Metric Badges Banner */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12 text-left">
-            <div className="glass-card rounded-2xl p-5 border border-slate-800">
-              <div className="flex items-center gap-3 text-cyan-400 mb-2">
-                <Smartphone className="w-5 h-5" />
-                <span className="text-xs uppercase font-mono font-semibold text-slate-400">Play Store</span>
-              </div>
-              <div className="text-2xl font-bold text-white">Live & Verified</div>
-              <p className="text-xs text-slate-400 mt-1">OBIN App v3.0.8 Approved</p>
-            </div>
-
-            <div className="glass-card rounded-2xl p-5 border border-slate-800">
-              <div className="flex items-center gap-3 text-red-400 mb-2">
+        {/* Live Animated Metric Counter Cards */}
+        <div id="stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-16">
+          {/* Card 1: YouTube */}
+          <div className="glass-panel rounded-2xl p-6 border border-slate-800/90 hover:border-red-500/40 transition group glow-card-cyan">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">YouTube</span>
+              <div className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 group-hover:scale-110 transition">
                 <Youtube className="w-5 h-5" />
-                <span className="text-xs uppercase font-mono font-semibold text-slate-400">YouTube</span>
               </div>
-              <div className="text-2xl font-bold text-white">200K+ Subs</div>
-              <p className="text-xs text-slate-400 mt-1">Across 4 Tech Channels</p>
             </div>
+            <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              {ytCount}K<span className="text-red-500">+</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Subscribers Across 4 Channels</p>
+            <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-red-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+              MR Mobin 1M • Prime Mobin
+            </div>
+          </div>
 
-            <div className="glass-card rounded-2xl p-5 border border-slate-800">
-              <div className="flex items-center gap-3 text-blue-400 mb-2">
+          {/* Card 2: Telegram */}
+          <div className="glass-panel rounded-2xl p-6 border border-slate-800/90 hover:border-blue-500/40 transition group glow-card-cyan">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">Telegram</span>
+              <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
                 <Users className="w-5 h-5" />
-                <span className="text-xs uppercase font-mono font-semibold text-slate-400">Community</span>
               </div>
-              <div className="text-2xl font-bold text-white">150K+ Active</div>
-              <p className="text-xs text-slate-400 mt-1">Telegram Tech Network</p>
             </div>
+            <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              {tgCount}K<span className="text-blue-400">+</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Active Community Members</p>
+            <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-blue-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+              Daily Tech & App Network
+            </div>
+          </div>
 
-            <div className="glass-card rounded-2xl p-5 border border-slate-800">
-              <div className="flex items-center gap-3 text-emerald-400 mb-2">
-                <Zap className="w-5 h-5" />
-                <span className="text-xs uppercase font-mono font-semibold text-slate-400">Speed</span>
+          {/* Card 3: Google Play Production */}
+          <div className="glass-panel rounded-2xl p-6 border border-slate-800/90 hover:border-emerald-500/40 transition group glow-card-cyan">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">Google Play</span>
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition">
+                <Award className="w-5 h-5" />
               </div>
-              <div className="text-2xl font-bold text-white">AI-Accelerated</div>
-              <p className="text-xs text-slate-400 mt-1">3x Faster Time to Market</p>
+            </div>
+            <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              v3.0.8
+            </div>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Approved & Live Production</p>
+            <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-emerald-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              OBIN Gaming & Super Hub
+            </div>
+          </div>
+
+          {/* Card 4: Quality & Speed */}
+          <div className="glass-panel rounded-2xl p-6 border border-slate-800/90 hover:border-purple-500/40 transition group glow-card-purple">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs uppercase font-mono font-bold tracking-wider text-slate-400">Speed & AI</span>
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition">
+                <Zap className="w-5 h-5" />
+              </div>
+            </div>
+            <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              100<span className="text-purple-400">%</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-1 font-medium">Production Delivery Track</p>
+            <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-purple-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+              AI-Accelerated Execution
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Projects Section */}
-      <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-semibold mb-2">
-              Portfolio & Case Studies
+      {/* Infinite Skills Marquee */}
+      <div className="py-6 border-y border-white/5 bg-slate-950/40 overflow-hidden">
+        <div className="animate-marquee flex items-center gap-8">
+          {[...marqueeSkills, ...marqueeSkills].map((skill, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-3 text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap"
+            >
+              <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span className="hover:text-cyan-300 transition-colors">{skill}</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-              Proven <span className="gradient-text">Production Software</span>
-            </h2>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          {/* Filter Tabs */}
-          <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            {(["all", "apps", "web", "ai"] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition ${
-                  activeTab === tab
-                    ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                {tab === "all" ? "All Projects" : tab}
-              </button>
-            ))}
+      {/* Featured Public Projects Showcase (STRICTLY THE TWO REQUESTED PROJECTS) */}
+      <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 text-xs font-mono font-semibold tracking-wider uppercase">
+            <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-400" />
+            <span>Public Flagship Projects</span>
           </div>
+          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            Live Proven <span className="gradient-name">Software In Production</span>
+          </h2>
+          <p className="text-sm sm:text-base text-slate-400">
+            Real products built from scratch, published live, and serving active users with verified stability.
+          </p>
         </div>
 
-        {/* Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredProjects.map((project) => (
+        {/* 2 Flagship Project Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {publicProjects.map((project) => (
             <div
               key={project.id}
-              className="glass-card rounded-2xl p-7 border border-slate-800 flex flex-col justify-between group transition hover:-translate-y-1 duration-300"
+              className={`glass-panel rounded-3xl p-8 border border-slate-800 flex flex-col justify-between group transition-all duration-300 hover:-translate-y-2 relative overflow-hidden bg-gradient-to-b ${project.gradient}`}
             >
+              {/* Top Meta */}
               <div>
-                <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${project.badgeColor}`}
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold border ${project.badgeClass}`}
                   >
+                    <span className="w-2 h-2 rounded-full bg-current animate-pulse"></span>
                     {project.badge}
                   </span>
-                  <span className="text-xs font-mono text-slate-500">
+                  <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
                     {project.stats}
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition">
+                <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   {project.title}
                 </h3>
+                <p className="text-xs font-mono text-cyan-400 mb-4">{project.tagline}</p>
 
-                <p className="text-sm text-slate-300 leading-relaxed mb-6">
+                <p className="text-sm text-slate-300 leading-relaxed mb-6 font-normal">
                   {project.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 mb-6">
+                {/* Tech Pills */}
+                <div className="flex flex-wrap gap-2 mb-8">
                   {project.tech.map((t) => (
                     <span
                       key={t}
-                      className="px-2.5 py-1 rounded-md bg-slate-800/80 text-slate-300 text-xs font-mono border border-slate-700/50"
+                      className="px-3 py-1 rounded-lg bg-slate-900/90 text-slate-300 text-xs font-mono border border-slate-700/60"
                     >
                       {t}
                     </span>
@@ -370,35 +453,42 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between gap-4">
+              {/* Action Buttons */}
+              <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  {project.playStoreUrl && (
-                    <a
-                      href={project.playStoreUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition"
-                    >
+                  <a
+                    href={project.primaryLink.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition transform hover:scale-105 ${
+                      project.primaryLink.isPlayStore
+                        ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-lg shadow-emerald-500/25"
+                        : "bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-lg shadow-cyan-500/25"
+                    }`}
+                  >
+                    {project.primaryLink.isPlayStore ? (
                       <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>Google Play</span>
-                    </a>
-                  )}
+                    ) : (
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    )}
+                    <span>{project.primaryLink.text}</span>
+                  </a>
 
-                  {project.webUrl && (
+                  {project.secondaryLink && (
                     <a
-                      href={project.webUrl}
+                      href={project.secondaryLink.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl glass-panel hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Live Demo</span>
+                      <span>{project.secondaryLink.text}</span>
                     </a>
                   )}
                 </div>
 
-                <span className="text-xs font-mono text-slate-400">
-                  Production Ready
+                <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5" /> Live
                 </span>
               </div>
             </div>
@@ -406,286 +496,224 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Tech Stack & Capabilities */}
-      <section id="skills" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800/80">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-semibold mb-2">
-            Engineering Capabilities
+      {/* Automations & Core Engineering Capabilities */}
+      <section id="automations" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-white/5">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-bold">
+            Engineering & Automation
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-            Modern Tech Stack & <span className="gradient-text">AI Arsenal</span>
+          <h2 className="text-3xl sm:text-5xl font-black text-white">
+            What I Deliver for <span className="gradient-name">Clients & Businesses</span>
           </h2>
-          <p className="text-slate-400 mt-4 text-base">
-            Equipped with battle-tested frameworks to take mobile and web ideas from blank canvas to production scale.
+          <p className="text-sm sm:text-base text-slate-400">
+            End-to-end software engineering combining mobile, web, and automated AI growth systems.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Mobile App Dev */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-5">
+          {/* Service 1 */}
+          <div className="glass-panel rounded-2xl p-7 border border-slate-800 hover:border-cyan-500/40 transition group">
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition">
               <Smartphone className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Mobile Apps (Flutter & Dart)</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              Native-speed cross-platform apps with beautiful fluid animations, Google Play Store compliance, in-app purchases, and AdMob monetization.
+            <h3 className="text-xl font-bold text-white mb-2">Flutter Mobile Engineering</h3>
+            <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              Cross-platform iOS and Android apps with 60fps animations, Firebase authentication, AdMob revenue setups, and seamless Google Play approval compliance.
             </p>
-            <div className="flex flex-wrap gap-1.5 text-xs font-mono text-cyan-300">
-              <span className="bg-cyan-950/40 px-2 py-1 rounded">Flutter 3.x</span>
-              <span className="bg-cyan-950/40 px-2 py-1 rounded">Dart</span>
-              <span className="bg-cyan-950/40 px-2 py-1 rounded">Firebase</span>
-              <span className="bg-cyan-950/40 px-2 py-1 rounded">Google Play</span>
-              <span className="bg-cyan-950/40 px-2 py-1 rounded">AdMob SDK</span>
-            </div>
+            <ul className="text-xs font-mono text-cyan-300 space-y-1.5">
+              <li className="flex items-center gap-2">✓ Google Play 14-day Testing & Release</li>
+              <li className="flex items-center gap-2">✓ AdMob & In-App Monetization</li>
+              <li className="flex items-center gap-2">✓ Clean State Management & Firebase</li>
+            </ul>
           </div>
 
-          {/* Card 2: Full-Stack Web Dev */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-5">
+          {/* Service 2 */}
+          <div className="glass-panel rounded-2xl p-7 border border-slate-800 hover:border-indigo-500/40 transition group">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition">
               <Globe className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Full-Stack Web (Next.js & React)</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              Lightning-fast server-rendered web platforms, REST/GraphQL API integration, responsive Tailwind interfaces, and edge deployments on Vercel.
+            <h3 className="text-xl font-bold text-white mb-2">Next.js Web Platforms</h3>
+            <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              High-concurrency modern web applications powered by Next.js 15, React 19, and Tailwind CSS. Built for sub-second load times and global Vercel edge reliability.
             </p>
-            <div className="flex flex-wrap gap-1.5 text-xs font-mono text-indigo-300">
-              <span className="bg-indigo-950/40 px-2 py-1 rounded">Next.js 15/16</span>
-              <span className="bg-indigo-950/40 px-2 py-1 rounded">React 19</span>
-              <span className="bg-indigo-950/40 px-2 py-1 rounded">TypeScript</span>
-              <span className="bg-indigo-950/40 px-2 py-1 rounded">Tailwind CSS</span>
-              <span className="bg-indigo-950/40 px-2 py-1 rounded">Node.js</span>
-            </div>
+            <ul className="text-xs font-mono text-indigo-300 space-y-1.5">
+              <li className="flex items-center gap-2">✓ Next.js 15 & React 19 Architecture</li>
+              <li className="flex items-center gap-2">✓ SEO & Edge SSR Performance</li>
+              <li className="flex items-center gap-2">✓ REST & Webhook Integrations</li>
+            </ul>
           </div>
 
-          {/* Card 3: AI & Growth Systems */}
-          <div className="glass-card rounded-2xl p-6 border border-slate-800">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-5">
+          {/* Service 3 */}
+          <div className="glass-panel rounded-2xl p-7 border border-slate-800 hover:border-purple-500/40 transition group">
+            <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition">
               <Bot className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">AI Systems & Digital Media</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              AI-native workflow execution, autonomous cloud sync bots on Render, UGC AI video ad generation, and hyper-targeted digital media growth.
+            <h3 className="text-xl font-bold text-white mb-2">AI Automations & UGC Growth</h3>
+            <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              Custom AI pipelines that automate business workflows, sync cloud databases 24/7, and generate high-converting AI UGC video ads for digital campaigns.
             </p>
-            <div className="flex flex-wrap gap-1.5 text-xs font-mono text-purple-300">
-              <span className="bg-purple-950/40 px-2 py-1 rounded">AI UGC Ads</span>
-              <span className="bg-purple-950/40 px-2 py-1 rounded">Cloud Bots</span>
-              <span className="bg-purple-950/40 px-2 py-1 rounded">Render.com</span>
-              <span className="bg-purple-950/40 px-2 py-1 rounded">Sheets API</span>
-              <span className="bg-purple-950/40 px-2 py-1 rounded">Automation</span>
-            </div>
+            <ul className="text-xs font-mono text-purple-300 space-y-1.5">
+              <li className="flex items-center gap-2">✓ 24/7 Cloud Background Sync Daemons</li>
+              <li className="flex items-center gap-2">✓ AI UGC Video Ads & Viral Scripting</li>
+              <li className="flex items-center gap-2">✓ Telegram Bot & Google Sheet Automations</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Creator & Community Section */}
-      <section id="creator" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800/80">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-semibold">
-              Influence & Community
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white leading-tight">
-              A Creator with <span className="gradient-text">Real Audience</span> & Massive Reach
-            </h2>
-            <p className="text-slate-300 text-base leading-relaxed">
-              Beyond engineering, I create high-impact tech tutorials, AI workflows, and digital products. With over <strong className="text-white">200,000+ subscribers</strong> across my YouTube ecosystem and an active <strong className="text-white">150,000+ Telegram network</strong>, I understand what users truly engage with.
-            </p>
-
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-3 text-slate-300 text-sm">
-                <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>YouTube Channels: <strong className="text-white">MR Mobin 1M</strong>, <strong className="text-white">Prime Mobin</strong>, <strong className="text-white">Mobin IQ</strong>, <strong className="text-white">Build With Mobin</strong></span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300 text-sm">
-                <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>Specialized in AI UGC Video Ads, viral scripting, and retention editing</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300 text-sm">
-                <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>Direct community feedback loop for testing and improving apps rapidly</span>
-              </div>
-            </div>
+      {/* Developer Interactive Console */}
+      <section id="terminal" className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-white/5">
+        <div className="text-center mb-10 space-y-2">
+          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-bold">
+            Interactive System Console
           </div>
-
-          <div className="glass-card rounded-2xl p-8 border border-slate-800 space-y-6">
-            <div className="flex items-center justify-between pb-6 border-b border-slate-800">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
-                  <Youtube className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">YouTube Audience</div>
-                  <p className="text-xs text-slate-400">Total Ecosystem Reach</p>
-                </div>
-              </div>
-              <div className="text-3xl font-extrabold text-red-400">200K+</div>
-            </div>
-
-            <div className="flex items-center justify-between pb-6 border-b border-slate-800">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                  <Users className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">Telegram Network</div>
-                  <p className="text-xs text-slate-400">Active Daily Members</p>
-                </div>
-              </div>
-              <div className="text-3xl font-extrabold text-blue-400">150K+</div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-white">Google Play Production</div>
-                  <p className="text-xs text-slate-400">OBIN Live App Version</p>
-                </div>
-              </div>
-              <div className="text-3xl font-extrabold text-emerald-400">v3.0.8</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive Terminal Section */}
-      <section id="terminal" className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-t border-slate-800/80">
-        <div className="text-center mb-10">
-          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-semibold mb-2">
-            Interactive CLI
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Mobin Developer <span className="gradient-text">Console</span>
+          <h2 className="text-3xl sm:text-4xl font-black text-white">
+            Developer <span className="gradient-name">Terminal</span>
           </h2>
-          <p className="text-slate-400 text-sm mt-2">
-            Try typing commands like <code className="text-cyan-300 bg-slate-900 px-1.5 py-0.5 rounded">about</code>, <code className="text-cyan-300 bg-slate-900 px-1.5 py-0.5 rounded">projects</code>, <code className="text-cyan-300 bg-slate-900 px-1.5 py-0.5 rounded">skills</code>, or <code className="text-cyan-300 bg-slate-900 px-1.5 py-0.5 rounded">contact</code>.
+          <p className="text-slate-400 text-xs sm:text-sm">
+            Type <code className="text-cyan-300 bg-slate-900 px-2 py-0.5 rounded font-mono">about</code>, <code className="text-cyan-300 bg-slate-900 px-2 py-0.5 rounded font-mono">projects</code>, <code className="text-cyan-300 bg-slate-900 px-2 py-0.5 rounded font-mono">automations</code>, or <code className="text-cyan-300 bg-slate-900 px-2 py-0.5 rounded font-mono">contact</code>.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-800 bg-[#0c101c] shadow-2xl overflow-hidden font-mono text-xs sm:text-sm">
-          {/* Terminal Window Header */}
-          <div className="bg-[#141b2e] px-4 py-3 flex items-center justify-between border-b border-slate-800">
+        <div className="rounded-2xl border border-slate-800 bg-[#070b14] shadow-2xl overflow-hidden font-mono text-xs sm:text-sm">
+          {/* Console Header */}
+          <div className="bg-[#0e1424] px-4 py-3 flex items-center justify-between border-b border-slate-800">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-              <span className="text-slate-400 text-xs ml-2 flex items-center gap-1.5 font-sans">
-                <Terminal className="w-3.5 h-3.5" /> mobin@workstation:~ (bash)
+              <span className="text-slate-400 text-xs ml-2 flex items-center gap-1.5 font-sans font-medium">
+                <Terminal className="w-3.5 h-3.5 text-cyan-400" /> mobin@architect:~ (bash)
               </span>
             </div>
-            <span className="text-slate-500 text-xs">v3.2.0</span>
+            <span className="text-slate-500 text-xs">v4.0.0</span>
           </div>
 
-          {/* Terminal Logs */}
-          <div className="p-5 max-h-72 overflow-y-auto space-y-3">
+          {/* Console Logs */}
+          <div className="p-5 max-h-64 overflow-y-auto space-y-3">
             {terminalHistory.map((item, idx) => (
               <div key={idx} className="space-y-1">
                 <div className="flex items-center gap-2 text-cyan-400">
-                  <span className="text-emerald-400">mobin@dev:~$</span>
+                  <span className="text-emerald-400 font-bold">mobin@dev:~$</span>
                   <span>{item.command}</span>
                 </div>
-                <div className="text-slate-300 whitespace-pre-wrap pl-4 border-l border-slate-800">
+                <div className="text-slate-300 whitespace-pre-wrap pl-4 border-l border-cyan-500/30">
                   {item.output}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Input line */}
-          <form onSubmit={handleTerminalSubmit} className="p-4 bg-[#0a0e19] border-t border-slate-800/80 flex items-center gap-2">
+          {/* Console Input */}
+          <form onSubmit={handleTerminalSubmit} className="p-4 bg-[#050810] border-t border-slate-800 flex items-center gap-2">
             <span className="text-emerald-400 font-bold">mobin@dev:~$</span>
             <input
               type="text"
               value={terminalInput}
               onChange={(e) => setTerminalInput(e.target.value)}
               placeholder="type 'help' and press Enter..."
-              className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-600 font-mono"
+              className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder-slate-600 font-mono text-xs sm:text-sm"
             />
           </form>
         </div>
       </section>
 
-      {/* Contact & Hire Section */}
-      <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800/80">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-semibold mb-2">
-            Get In Touch
+      {/* Contact Section (STRICTLY Email & Telegram, NO GitHub) */}
+      <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto border-t border-white/5">
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <div className="text-xs uppercase tracking-widest font-mono text-cyan-400 font-bold">
+            Direct Communication
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-            Let&apos;s Build Your Next <span className="gradient-text">Breakthrough App</span>
+          <h2 className="text-3xl sm:text-5xl font-black text-white">
+            Let&apos;s Build Something <span className="gradient-name">Extraordinary</span>
           </h2>
-          <p className="text-slate-300 mt-4 text-base">
-            Have a project for Upwork, Fiverr, or a direct custom contract? Reach out directly via Telegram or Email.
+          <p className="text-slate-300 text-sm sm:text-base">
+            Have a mobile app, web application, or AI automation project? Reach out directly for fast response.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* 2 Big Direct Contact Cards (NO GITHUB) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Telegram Card */}
           <a
             href="https://t.me/MrMobin01"
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-cyan-500/40 transition group flex flex-col items-center text-center"
+            className="glass-panel rounded-3xl p-8 border border-slate-800 hover:border-cyan-500/50 transition group flex flex-col items-center text-center glow-card-cyan transform hover:-translate-y-1.5"
           >
-            <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition">
-              <Send className="w-6 h-6" />
+            <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center text-cyan-400 mb-5 group-hover:scale-110 transition">
+              <Send className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">Telegram</h3>
-            <p className="text-xs text-slate-400 mb-3">Fastest response time</p>
-            <div className="text-sm font-semibold text-cyan-300">@MrMobin01</div>
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Fastest Response Time
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-1">Telegram</h3>
+            <p className="text-xs text-slate-400 mb-4">Direct personal messaging</p>
+            <div className="text-base font-bold text-cyan-300 group-hover:text-cyan-200 transition">
+              @MrMobin01
+            </div>
           </a>
 
           {/* Email Card */}
           <div
             onClick={copyEmail}
-            className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-cyan-500/40 transition group flex flex-col items-center text-center cursor-pointer"
+            className="glass-panel rounded-3xl p-8 border border-slate-800 hover:border-indigo-500/50 transition group flex flex-col items-center text-center glow-card-purple transform hover:-translate-y-1.5 cursor-pointer"
           >
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition">
-              <Mail className="w-6 h-6" />
+            <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center text-indigo-400 mb-5 group-hover:scale-110 transition">
+              <Mail className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">Email</h3>
-            <p className="text-xs text-slate-400 mb-3">For business inquiries</p>
-            <div className="text-sm font-semibold text-indigo-300 truncate max-w-full">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full mb-3">
+              <Check className="w-3.5 h-3.5" />
+              Official Business Inbox
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-1">Email</h3>
+            <p className="text-xs text-slate-400 mb-4">Click to copy address</p>
+            <div className="text-base font-bold text-indigo-300 group-hover:text-indigo-200 transition truncate max-w-full">
               mobinyt420@gmail.com
             </div>
-            <span className="text-[11px] text-slate-500 mt-2">
-              {copied ? "Copied to clipboard!" : "Click to copy"}
+            <span className="text-[11px] font-mono text-slate-500 mt-2">
+              {copied ? "✓ Copied to clipboard!" : "Click to copy"}
             </span>
           </div>
-
-          {/* GitHub Card */}
-          <a
-            href="https://github.com/mobinyt420-creator"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glass-card rounded-2xl p-6 border border-slate-800 hover:border-purple-500/40 transition group flex flex-col items-center text-center"
-          >
-            <div className="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-4 group-hover:scale-110 transition">
-              <Github className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-white mb-1">GitHub</h3>
-            <p className="text-xs text-slate-400 mb-3">Open-source & repositories</p>
-            <div className="text-sm font-semibold text-purple-300">@mobinyt420-creator</div>
-          </a>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <div>
-          © {new Date().getFullYear()} Mr Mobin. Built with Next.js, React 19 & Tailwind CSS.
+      <footer className="border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-500">
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center font-bold text-cyan-400">
+            M
+          </div>
+          <div>
+            © {new Date().getFullYear()} <strong className="text-slate-300">Mr Mobin</strong>. All Rights Reserved.
+          </div>
         </div>
-        <div className="flex items-center gap-6">
-          <a href="https://play.google.com/store/apps/details?id=com.mobinx.gaming" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition">
+
+        <div className="flex items-center gap-6 font-mono text-[11px]">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.mobinx.gaming"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-cyan-400 transition"
+          >
             OBIN on Google Play
           </a>
-          <a href="https://obinapp.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition">
+          <a
+            href="https://obinapp.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-cyan-400 transition"
+          >
             OBIN Web
           </a>
-          <a href="https://t.me/MrMobin01" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition">
-            Telegram
+          <a
+            href="https://t.me/MrMobin01"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-cyan-400 transition"
+          >
+            Telegram: @MrMobin01
           </a>
         </div>
       </footer>
