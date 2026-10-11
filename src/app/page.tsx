@@ -218,7 +218,7 @@ export default function Home() {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            I'm <strong className="text-white">Mr Mobin</strong>, a full-stack engineer and digital creator with over <span className="text-cyan-300 font-semibold">200k+ audience</span>. I build Google Play verified Flutter apps, high-performance Next.js platforms, and scalable automated cloud workflows.
+            I&apos;m <strong className="text-white">Mr Mobin</strong>, a full-stack engineer and digital creator with over <span className="text-cyan-300 font-semibold">200k+ audience</span>. I build Google Play verified Flutter apps, high-performance Next.js platforms, and scalable automated cloud workflows.
           </p>
 
           {/* Action Buttons */}
@@ -614,7 +614,7 @@ export default function Home() {
             Get In Touch
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
-            Let's Build Your Next <span className="gradient-text">Breakthrough App</span>
+            Let&apos;s Build Your Next <span className="gradient-text">Breakthrough App</span>
           </h2>
           <p className="text-slate-300 mt-4 text-base">
             Have a project for Upwork, Fiverr, or a direct custom contract? Reach out directly via Telegram or Email.
